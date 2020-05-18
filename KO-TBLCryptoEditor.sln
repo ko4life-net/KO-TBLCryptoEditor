@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KO-TBLCryptoEditor", "source\KO-TBLCryptoEditor\KO-TBLCryptoEditor.csproj", "{29854838-9FCA-4090-BA6E-85CD54280847}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", "{1790BEB3-7281-48E1-B189-4EADB596D905}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternFinder", "thirdparty\PatternFinder\PatternFinder\PatternFinder.csproj", "{5FFB2393-5455-49C1-8D45-3EA5C0F22386}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workshell.PE", "thirdparty\pe\src\Workshell.PE\Workshell.PE.csproj", "{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CI|Any CPU = CI|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29854838-9FCA-4090-BA6E-85CD54280847}.CI|Any CPU.ActiveCfg = Release|Any CPU
+		{29854838-9FCA-4090-BA6E-85CD54280847}.CI|Any CPU.Build.0 = Release|Any CPU
+		{29854838-9FCA-4090-BA6E-85CD54280847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29854838-9FCA-4090-BA6E-85CD54280847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29854838-9FCA-4090-BA6E-85CD54280847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29854838-9FCA-4090-BA6E-85CD54280847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.CI|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.CI|Any CPU.Build.0 = Release|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.CI|Any CPU.ActiveCfg = CI|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.CI|Any CPU.Build.0 = CI|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5FFB2393-5455-49C1-8D45-3EA5C0F22386} = {1790BEB3-7281-48E1-B189-4EADB596D905}
+		{A08F8A40-9EEA-4A5D-B434-C4FBFD5EFFD8} = {1790BEB3-7281-48E1-B189-4EADB596D905}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58EDDF0E-2C5B-4255-B74B-E468E971CD4F}
+	EndGlobalSection
+EndGlobal

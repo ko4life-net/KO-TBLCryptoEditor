@@ -1,0 +1,7 @@
+packages/
+.vs/
+source/KO-TBLCryptoEditor/obj/
+source/KO-TBLCryptoEditor/bin/
+UpgradeLog.htm
+source/KO-TBLCryptoEditor/FodyWeavers.xml
+source/KO-TBLCryptoEditor/FodyWeavers.xsd

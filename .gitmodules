@@ -1,0 +1,6 @@
+[submodule "thirdparty/PatternFinder"]
+	path = thirdparty/PatternFinder
+	url = https://github.com/ko4life-net/PatternFinder.git
+[submodule "thirdparty/pe"]
+	path = thirdparty/pe
+	url = https://github.com/ko4life-net/pe.git
