@@ -22,6 +22,8 @@ namespace KO.TBLCryptoEditor.Views
             InitializeComponent();
             _targetFile = null;
             _previousKeys = null;
+
+            Text += $" v{Application.ProductVersion}";
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
