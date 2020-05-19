@@ -30,7 +30,7 @@ namespace KO.TBLCryptoEditor.Views
             basicInfo = new Dictionary<string, string>
             {
                 { "Patches Count", $"{_pe.CryptoPatches.Count}" },
-                { "Target Executeable", $"{_pe.FilePath}" },
+                { "Target Executable", $"{_pe.FilePath}" },
                 { "Client Internal Version", $"{_pe.ClientVersion}" },
                 { "Linker Version", $"MSVC-{_pe.MajorLinkerVersion}.0 (Microsoft Visual C++)" },
                 { "Inlined Functions Count", $"{_pe.CryptoPatches.Count(p => p.Inlined)}" },
@@ -48,7 +48,7 @@ namespace KO.TBLCryptoEditor.Views
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"<style>{GetStyleSheet()}\n</style>");
 
-            using (HtmlTable table = new HtmlTable(sb, "Executeable Basic Information"))
+            using (HtmlTable table = new HtmlTable(sb, "Executable Basic Information"))
             {
                 foreach (var item in basicInfo)
                 {

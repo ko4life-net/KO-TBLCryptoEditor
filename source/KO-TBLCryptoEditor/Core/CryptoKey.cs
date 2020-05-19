@@ -8,11 +8,11 @@ namespace KO.TBLCryptoEditor.Core
         public ushort Key { get; }
         public long VirtualAddress { get; }
 
-        public CryptoKey(long offset, ushort key, long virtualAdderss)
+        public CryptoKey(long offset, ushort key, long virtualAddress)
         {
             Offset = offset;
             Key = key;
-            VirtualAddress = virtualAdderss;
+            VirtualAddress = virtualAddress;
         }
 
         public override bool Equals(object obj)

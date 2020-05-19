@@ -75,7 +75,7 @@
             this.btnUpdateClient.Size = new System.Drawing.Size(153, 32);
             this.btnUpdateClient.TabIndex = 2;
             this.btnUpdateClient.Text = "Update Client Encryption";
-            this.toolTip.SetToolTip(this.btnUpdateClient, "New keys will be applied inside the executeable.");
+            this.toolTip.SetToolTip(this.btnUpdateClient, "New keys will be applied inside the executable.");
             this.btnUpdateClient.UseVisualStyleBackColor = true;
             this.btnUpdateClient.Click += new System.EventHandler(this.btnPatchClient_Click);
             // 
@@ -239,7 +239,7 @@
             this.btnViewOffsets.Size = new System.Drawing.Size(153, 32);
             this.btnViewOffsets.TabIndex = 1;
             this.btnViewOffsets.Text = "View Found Offsets";
-            this.toolTip.SetToolTip(this.btnViewOffsets, "View all keys that were found on the target executeable and additional informatio" +
+            this.toolTip.SetToolTip(this.btnViewOffsets, "View all keys that were found on the target executable and additional informatio" +
         "n on the target exe.");
             this.btnViewOffsets.UseVisualStyleBackColor = true;
             this.btnViewOffsets.Click += new System.EventHandler(this.btnViewOffsets_Click);

@@ -62,10 +62,13 @@ namespace KO.TBLCryptoEditor.Core
         public InitializationFailure Initialize(bool skipKOValidation, bool skipClientVersionRetrieval)
         {
             if (_data == null)
-                return new InitializationFailure("Failed to retrieve data from the target executeable.");
+                return new InitializationFailure("Failed to retrieve data from the target executable.");
 
             if (!skipKOValidation && !ValidateKOClient())
-                return new InitializationFailure("Failed to validate target as Knight Online executeable.");
+                return new InitializationFailure(
+                    "Failed to validate target as Knight Online executable.\n" +
+                    "Try and check the Check-Box 'Skip KO Validation' and also make sure the exe is not packed.\n" +
+                    "You can download Detect-It-Easy from www.ntinfo.biz to check whether the target is packed.");
 
             if (!skipClientVersionRetrieval && !InitClientVersion())
                 return new InitializationFailure("Failed to retrieve target client version.");
@@ -83,11 +86,18 @@ namespace KO.TBLCryptoEditor.Core
             long offset;
             if (!Pattern.Find(_data, KnightOnLineClient, out offset))
             {
-                Log.Error("Couldn't find 'Knight OnLine Client' string in the binary to verify the target.");
-                return false;
+                Log.Warn("Could not find 'Knight OnLine Client' string in the binary to verify the target.");
+                var n3TableBase = Pattern.Transform("4E 33 54 61 62 6C 65 42 61 73 65"); // "N3TableBase"
+                if (!Pattern.Find(_data, n3TableBase, out offset))
+                {
+                    Log.Error("Could not find 'N3TableBase' string in the binary to verify the target.");
+                    Log.Error("Maybe the target executable is packed. " +
+                              "Download Detect-It-Easy from www.ntinfo.biz to verify this.");
+                    return false;
+                }
             }
 
-            Log.Info("Verified as KnightOnline executeable.");
+            Log.Info("Verified as KnightOnline executable.");
             return true;
         }
 
@@ -132,7 +142,7 @@ namespace KO.TBLCryptoEditor.Core
                     ms.Read(buff, 0, 1);
                     if (ms.Position > originOffset)
                     {
-                        Log.Error("Couldn't find a compare instruction to determine the right offset for the client version.");
+                        Log.Error("Could not find a compare instruction to determine the right offset for the client version.");
                         return false;
                     }
                 } while (buff[0] != cmp);
@@ -151,7 +161,7 @@ namespace KO.TBLCryptoEditor.Core
                 }
             }
 
-            Log.Error("Couldn't find client version.");
+            Log.Error("Could not find client version.");
             return false;
         }
 
@@ -238,7 +248,7 @@ namespace KO.TBLCryptoEditor.Core
 
                 if (decryptRegionOffset == -1)
                 {
-                    Log.Warn($"Coudn't find decryption offset from the string offset 0x{Calculator.OffsetToVA((ulong)regionStrRefOffset):X8}");
+                    Log.Warn($"Could not find decryption offset from the string offset 0x{Calculator.OffsetToVA((ulong)regionStrRefOffset):X8}");
                     Log.Warn("Skipping to the next one...");
                     continue;
                 }
@@ -277,7 +287,7 @@ namespace KO.TBLCryptoEditor.Core
 
             if (CryptoPatches.Count != regionStrRefOffsets.Count)
             {
-                Log.Error("Mistmatch count of Crypto-Patches count vs N3TableBase string offsets.");
+                Log.Error("Mismatch count of Crypto-Patches count vs N3TableBase string offsets.");
                 return false;
             }
 
@@ -416,7 +426,7 @@ namespace KO.TBLCryptoEditor.Core
 
                 File.WriteAllBytes(FileInfo.FullName, _data);
 
-                Log.Info("Trying to verify again the same executeable after patches were applied.");
+                Log.Info("Trying to verify again the same executable after patches were applied.");
                 if (!InitKeysOffsets())
                 {
                     Log.Error("Something went off... -_- Failed to verify the newly applied patches.");

@@ -68,14 +68,14 @@ namespace KO.TBLCryptoEditor.Views
         {
             Log.Info($"Loading PE file {filePath}");
             panelDragArea.BackColor = SystemColors.Control;
-            Action<string, string> failed = (msg, title) =>
+            void failed(string message, string title)
             {
-                Log.Error(msg);
+                Log.Error(message);
                 DisableControls();
-                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lblStatus.Text = "Waiting for user action.";
                 tbxKey1.Text = tbxKey2.Text = tbxKey3.Text = "0xFFFF";
-            };
+            }
 
             _targetFile = new TargetPE(filePath);
             if (!_targetFile.IsValid)
@@ -87,7 +87,7 @@ namespace KO.TBLCryptoEditor.Views
             var result = _targetFile.Initialize(cbxSkipKOValidation.Checked, cbxSkipClientVersion.Checked);
             if (result != null)
             {
-                failed("Failed to initialize target executeable. Reason:\n" + result.Reason, "Invalid File");
+                failed("Failed to initialize target executable. Reason:\n" + result.Reason, "Invalid File");
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace KO.TBLCryptoEditor.Views
             lblStatus.Text = $"[v{_targetFile.ClientVersion}]: Loaded: {filePath}";
             EnableControls();
 
-            // DES encryption won't be supported for batch upadting client tbls.
+            // DES encryption won't be supported for batch updating client tbls.
             btnUpdateData.Enabled = _targetFile.CryptoPatches.CryptoType == CryptoType.XOR;
         }
 
@@ -212,7 +212,7 @@ namespace KO.TBLCryptoEditor.Views
                 MessageBox.Show("Successfully update tables to new encryption.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show("Failed to update tables to the new encryption.\n" +
-                                "Your current TBLs encryption mistmatched with the firstly loaded executeable.\n" +
+                                "Your current TBLs encryption mismatched with the firstly loaded executable.\n" +
                                 "Please review the log file for more details.",
                                 "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
