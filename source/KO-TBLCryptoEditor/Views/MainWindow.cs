@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 using KO.TBLCryptoEditor.Controls;
@@ -14,6 +15,8 @@ namespace KO.TBLCryptoEditor.Views
 {
     public partial class MainWindow : Form
     {
+        private static readonly ILog Log = Logger.GetLogger();
+
         private TargetPE _targetFile;
         private short[] _previousKeys;
 
@@ -63,9 +66,11 @@ namespace KO.TBLCryptoEditor.Views
 
         private void LoadPE(string filePath)
         {
+            Log.Info($"Loading PE file {filePath}");
             panelDragArea.BackColor = SystemColors.Control;
             Action<string, string> failed = (msg, title) =>
             {
+                Log.Error(msg);
                 DisableControls();
                 MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lblStatus.Text = "Waiting for user action.";
@@ -86,12 +91,14 @@ namespace KO.TBLCryptoEditor.Views
                 return;
             }
 
+            Log.Info("File successfully loaded and initialized keys.");
             tbxKey1.Text = tbxKey2.Text = tbxKey3.Text = "0x";
             var samplePatch = _targetFile.CryptoPatches.Find(p => !p.Inlined);
             tbxKey1.Text += samplePatch[0].Key.ToString("X4");
             tbxKey2.Text += samplePatch[1].Key.ToString("X4");
             tbxKey3.Text += samplePatch[2].Key.ToString("X4");
 
+            Log.Info("Caching loaded crypto keys: " + samplePatch.GetKeysFormatted());
             _previousKeys = new short[CryptoPatch.KEYS_COUNT];
             for (int i = 0; i < CryptoPatch.KEYS_COUNT; i++)
                 _previousKeys[i] = (short)samplePatch.Keys[i].Key;
@@ -119,9 +126,9 @@ namespace KO.TBLCryptoEditor.Views
         {
             if (cbxCreateBackup.Checked && !_targetFile.CreateBackup())
             {
-                DialogResult answer = MessageBox.Show("Failed to create backup.\n" +
-                                                      "Would you like to continue anyway?", "Warning",
-                                                       MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var answer = MessageBox.Show("Failed to create backup.\n" +
+                                             "Would you like to continue anyway?", "Warning",
+                                             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (answer == DialogResult.No)
                     return;
             }
@@ -129,7 +136,8 @@ namespace KO.TBLCryptoEditor.Views
             if (Utility.IsFileLocked(_targetFile.FilePath))
             {
                 MessageBox.Show("Target file seem to be locked by other processes.\n" +
-                                "Make sure to close the following apps and try again:\n" + Utility.WhoIsFileLocking(_targetFile.FilePath),
+                                "Make sure to close the following apps and try again:\n" + 
+                                Utility.WhoIsFileLocking(_targetFile.FilePath),
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -137,8 +145,8 @@ namespace KO.TBLCryptoEditor.Views
             if (_targetFile.Patch(tbxKey1.Key, tbxKey2.Key, tbxKey3.Key))
             {
                 MessageBox.Show("Successfully patched new encryption keys.\n" +
-                                "TBL_Key.txt file saved under the same directory.\n" +
-                                "Next step, make sure to click the 'Update Data Encryption' button, so your client can load them properly.",
+                                "Make sure to save the log file generated in the same directory as a reference.\n" +
+                                $"Next, click the '{btnUpdateData.Text}' button, so your client can load the tbls correctly.",
                                 "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -205,7 +213,8 @@ namespace KO.TBLCryptoEditor.Views
                 MessageBox.Show("Successfully update tables to new encryption.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show("Failed to update tables to the new encryption.\n" +
-                                "Your current TBLs encryption mistmatched with the firstly loaded executeable.",
+                                "Your current TBLs encryption mistmatched with the firstly loaded executeable.\n" +
+                                "Please review the log file for more details.",
                                 "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
@@ -237,7 +246,7 @@ namespace KO.TBLCryptoEditor.Views
             {
                 byte[] data = File.ReadAllBytes(fi.FullName);
                 if (IsTableDecrypted(data))
-                    Console.WriteLine($"[MainWindow::UpdateTablesEncryption]: Table {fi.Name} is not encrypted. Updating to new encryption.");
+                    Log.Info($"Table {fi.Name} is not encrypted. Updating to new encryption.");
                 else
                     FileSecurity.DecryptXOR(data, _previousKeys[0], _previousKeys[1], _previousKeys[2]);
 
