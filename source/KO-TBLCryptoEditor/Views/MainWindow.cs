@@ -114,12 +114,11 @@ namespace KO.TBLCryptoEditor.Views
 
         private void btnGenerateKeys_Click(object sender, EventArgs e)
         {
-            Random rnd = new Random((int)DateTime.Now.Ticks);
-            tbxKey1.Text = tbxKey3.Text = "0x";
-            tbxKey1.Text += rnd.Next(200, 4094).ToString("X4");
+            Random rnd = new Random(Seed: (int)DateTime.Now.Ticks);
+            tbxKey1.Text = $"0x{rnd.Next(200, 35000):X4}";
             if (tbxKey2.Enabled)
-                tbxKey2.Text = "0x" + rnd.Next(1000, 310500).ToString("X4");
-            tbxKey3.Text += rnd.Next(3500, 614000).ToString("X4");
+                tbxKey2.Text = $"0x{rnd.Next(1000, 31050):X4}";
+            tbxKey3.Text = $"0x{rnd.Next(3500, 45000):X4}";
         }
 
         private void btnPatchClient_Click(object sender, EventArgs e)
@@ -248,7 +247,14 @@ namespace KO.TBLCryptoEditor.Views
                 if (IsTableDecrypted(data))
                     Log.Info($"Table {fi.Name} is not encrypted. Updating to new encryption.");
                 else
+                {
                     FileSecurity.DecryptXOR(data, _previousKeys[0], _previousKeys[1], _previousKeys[2]);
+                    if (!IsTableDecrypted(data)) // verify that we managed to decrypt it.
+                    {
+                        Log.Error($"Failed to decrypt {fi.Name}.");
+                        return false;
+                    }
+                }
 
                 FileSecurity.EncryptXOR(data, tbxKey1.Key, tbxKey2.Key, tbxKey3.Key);
                 File.WriteAllBytes(fi.FullName, data);
