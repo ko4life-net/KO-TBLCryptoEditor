@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
+using log4net;
 using Workshell.PE;
 using PatternFinder;
 
@@ -12,6 +13,8 @@ namespace KO.TBLCryptoEditor.Core
 {
     public partial class TargetPE
     {
+        private static readonly ILog Log = Logger.GetLogger();
+
         private byte[] _data;
 
         public PortableExecutableImage PE { get; }
@@ -51,6 +54,7 @@ namespace KO.TBLCryptoEditor.Core
 
                     IsValid = true;
                     CanUpdateKey2 = true;
+                    Log.Info($"Loaded file seem to be valid.");
                 }
             }
         }
@@ -79,10 +83,11 @@ namespace KO.TBLCryptoEditor.Core
             long offset;
             if (!Pattern.Find(_data, KnightOnLineClient, out offset))
             {
-                Console.WriteLine("[TargetPE::ValidateKOClient]: Doesn't seem like a valid KO exe.");
+                Log.Error("Couldn't find 'Knight OnLine Client' string in the binary to verify the target.");
                 return false;
             }
 
+            Log.Info("Verified as KnightOnline executeable.");
             return true;
         }
 
@@ -96,7 +101,7 @@ namespace KO.TBLCryptoEditor.Core
             long offset;
             if (!Pattern.Find(_data, pattern, out offset))
             {
-                Console.WriteLine("[TargetPE::InitClientVersion]: Failed to find resource offset.");
+                Log.Error("Failed to find resource offset.");
                 return false;
             }
 
@@ -107,8 +112,7 @@ namespace KO.TBLCryptoEditor.Core
             int resourceId = BitConverter.ToInt32(buff, 0);
             if (resourceId != 4803)
             {
-                Console.WriteLine($"[TargetPE::InitClientVersion]: Invalid resource id: {resourceId}." +
-                                    $"Are we at the right location? :)");
+                Log.Error($"Invalid resource id: {resourceId}. Are we at the right place? :)");
                 return false;
             }
 
@@ -127,7 +131,10 @@ namespace KO.TBLCryptoEditor.Core
                 {
                     ms.Read(buff, 0, 1);
                     if (ms.Position > originOffset)
+                    {
+                        Log.Error("Couldn't find a compare instruction to determine the right offset for the client version.");
                         return false;
+                    }
                 } while (buff[0] != cmp);
 
                 for (int i = 0; i < MAX_STEPS_FORWARD; i++)
@@ -137,13 +144,14 @@ namespace KO.TBLCryptoEditor.Core
                     if (version > MIN_CLIENT_VERSION && version < MAX_CLIENT_VERSION)
                     {
                         ClientVersion = version;
-                        Console.WriteLine("[TargetPE::InitClientVersion]: Found client version v" + ClientVersion);
+                        Log.Info("Found client internal version v" + ClientVersion);
                         return true;
                     }
                     ms.Position -= 3;
                 }
             }
 
+            Log.Error("Couldn't find client version.");
             return false;
         }
 
@@ -156,7 +164,7 @@ namespace KO.TBLCryptoEditor.Core
             long offsetLogWrite;
             if (!Pattern.Find(_data, pattern, out offsetLogWrite))
             {
-                Console.WriteLine("[TargetPE::InitKeysOffsets]: Unable to find offset.");
+                Log.Error("Unable to find string offset for 'N3TableBase - Can't open file'.");
                 return false;
             }
 
@@ -167,16 +175,16 @@ namespace KO.TBLCryptoEditor.Core
                 logWriteGenPattern += i % 2 == 0 ? " " + logWriteVA.Substring(i, 2) : "";
             logWriteGenPattern += " E8"; // call
 
-            Console.WriteLine($"[TargetPE::InitKeysOffsets]: Generated pattern result: {logWriteGenPattern}");
+            Log.Info($"Generated N3TableBase string pattern result: {logWriteGenPattern}");
             var patternStrRefRegion = Pattern.Transform(logWriteGenPattern);
             List<long> regionStrRefOffsets;
             if (!Pattern.FindAll(_data, patternStrRefRegion, out regionStrRefOffsets))
             {
-                Console.WriteLine("[TargetPE::InitKeysOffsets]: No offsets were found.");
+                Log.Error("No references to N3TableBase string were found.");
                 return false;
             }
 
-            Console.WriteLine($"[TargetPE::InitKeysOffsets]: Found {regionStrRefOffsets.Count} region offsets.");
+            Log.Info($"Found {regionStrRefOffsets.Count} N3TableBase string region offsets.");
 
             var patDecryptRegions = new Pattern.Byte[][] {
                 // push ?? <- DWORD as short
@@ -230,7 +238,8 @@ namespace KO.TBLCryptoEditor.Core
 
                 if (decryptRegionOffset == -1)
                 {
-                    Console.WriteLine($"[TargetPE::InitKeysOffsets]: Unable to find decryption region offset.");
+                    Log.Warn($"Coudn't find decryption offset from the string offset 0x{Calculator.OffsetToVA((ulong)regionStrRefOffset):X8}");
+                    Log.Warn("Skipping to the next one...");
                     continue;
                 }
 
@@ -242,7 +251,10 @@ namespace KO.TBLCryptoEditor.Core
                 if (isInlinedFunction)
                 {
                     if (!InitInlinedKeys(keys, ms))
+                    {
+                        Log.Error("Failed to find inlined keys offsets.");
                         return false;
+                    }
                 }
                 else
                 {
@@ -264,7 +276,10 @@ namespace KO.TBLCryptoEditor.Core
             CryptoPatches.CryptoType = detectedDesEncryption ? CryptoType.DES_XOR : CryptoType.XOR;
 
             if (CryptoPatches.Count != regionStrRefOffsets.Count)
+            {
+                Log.Error("Mistmatch count of Crypto-Patches count vs N3TableBase string offsets.");
                 return false;
+            }
 
             if (!VerifyAllMatchedKeys(CryptoPatches))
                 return false;
@@ -291,7 +306,7 @@ namespace KO.TBLCryptoEditor.Core
             }
             if (key1Offset == -1)
             {
-                Console.WriteLine($"[TargetPE::InitInlinedKeys]: Unable to find key1.");
+                Log.Error($"Unable to find key1 offset.");
                 return false;
             }
             DWORD dword = ms.ReadStructure<DWORD>();
@@ -321,7 +336,7 @@ namespace KO.TBLCryptoEditor.Core
             }
             if (key2Offset == -1)
             {
-                Console.WriteLine($"[TargetPE::InitInlinedKeys]: Unable to find key2.");
+                Log.Error($"Unable to find key2 offset.");
                 return false;
             }
             dword = ms.ReadStructure<DWORD>();
@@ -338,10 +353,18 @@ namespace KO.TBLCryptoEditor.Core
             foreach (var inlinedPatch in inlinedPatches)
             {
                 if (inlinedPatch.Keys[0].Key != samplePatch.Keys[0].Key)
+                {
+                    var keyVA = Calculator.OffsetToVA((ulong)inlinedPatch.Keys[0].Offset);
+                    Log.Error($"Unmatched results. Inlined patch key1 (0x{keyVA:X8}) not equals to sample patch key1.");
                     return false;
+                }
 
                 if (inlinedPatch.Keys[2].Key != samplePatch.Keys[2].Key)
+                {
+                    var keyVA = Calculator.OffsetToVA((ulong)inlinedPatch.Keys[2].Offset);
+                    Log.Error($"Unmatched results. Inlined patch key3 (0x{keyVA:X8}) not equals to sample patch key3.");
                     return false;
+                }
             }
 
             var regularPatches = CryptoPatches.Where(p => !p.Inlined);
@@ -350,7 +373,11 @@ namespace KO.TBLCryptoEditor.Core
                 for (int i = 0; i < CryptoPatch.KEYS_COUNT; i++)
                 {
                     if (patch.Keys[i].Key != samplePatch.Keys[i].Key)
+                    {
+                        var keyVA = Calculator.OffsetToVA((ulong)patch.Keys[i].Offset);
+                        Log.Error($"Unmatched results. Regular patch key (0x{keyVA:X8}) not equals to sample patch key.");
                         return false;
+                    }
                 }
             }
 
@@ -360,8 +387,12 @@ namespace KO.TBLCryptoEditor.Core
         public bool Patch(short key_r, short key_c1, short key_c2)
         {
             if (_data == null)
+            {
+                Log.Error("Failed to patch. Data seems to be missing.");
                 return false;
+            }
 
+            Log.Info("Starting to patch target file with new keys.");
             short[] newKeys = { key_r, key_c1, key_c2 };
             using (var ms = new MemoryStream(_data))
             {
@@ -372,6 +403,7 @@ namespace KO.TBLCryptoEditor.Core
                         if (i == 1 && !CanUpdateKey2)
                             continue;
 
+                        Log.Info($"Before patched: {patch}");
                         ms.Position = patch.Keys[i].Offset;
                         DWORD dword = (DWORD)newKeys[i];
                         ms.WriteByte(dword.byValue1);
@@ -384,11 +416,18 @@ namespace KO.TBLCryptoEditor.Core
 
                 File.WriteAllBytes(FileInfo.FullName, _data);
 
-                // Re-initialize new changes, to verify we patched everything correctly.
+                Log.Info("Trying to verify again the same executeable after patches were applied.");
                 if (!InitKeysOffsets())
+                {
+                    Log.Error("Something went off... -_- Failed to verify the newly applied patches.");
                     return false;
+                }
+                Log.Info("All seems good! ^_^ Printing results as a reference:");
+                foreach (var patch in CryptoPatches)
+                    Log.Info($"After patched: {patch}");
             }
 
+            Log.Info($"Successfully patched target file with new keys: 0x{key_r:X4}, 0x{key_c1:X4}, 0x{key_c2:X4}");
             return true;
         }
 
@@ -431,6 +470,7 @@ namespace KO.TBLCryptoEditor.Core
                 if (!File.Exists(dstFileTmp))
                 {
                     FileInfo.CopyTo(dstFileTmp);
+                    Log.Info($"Successfully created backup of the target file: {dstFileTmp}");
                     return true;
                 }
             } while (File.Exists(dstFileTmp));

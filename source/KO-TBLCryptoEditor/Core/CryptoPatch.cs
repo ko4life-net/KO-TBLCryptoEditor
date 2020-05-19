@@ -54,9 +54,21 @@ namespace KO.TBLCryptoEditor.Core
             return GetEnumerator();
         }
 
+        public string GetKeysFormatted()
+        {
+            string str = String.Empty;
+            foreach (var key in Keys)
+                str += $"0x{key.Key:X4}, ";
+            str = str.TrimEnd(',', ' ');
+            return str;
+        }
         public override string ToString()
         {
-            return base.ToString();
+            string str = String.Empty;
+            foreach (var key in Keys)
+                str += $"{key}, ";
+            str = str.TrimEnd(',', ' ');
+            return str;
         }
 
         public override int GetHashCode()
