@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using KO.TBLCryptoEditor.Core;
@@ -10,6 +11,7 @@ namespace KO.TBLCryptoEditor.Views
 {
     public partial class ViewOffsetsWindow : Form
     {
+        Dictionary<string, string> basicInfo;
         private TargetPE _pe;
 
         public ViewOffsetsWindow(TargetPE pe)
@@ -20,6 +22,17 @@ namespace KO.TBLCryptoEditor.Views
             _pe = pe;
 
             InitializeComponent();
+
+            string cryptoType = _pe.CryptoPatches.CryptoType == CryptoType.XOR ? "XOR Cipher" : "DES + XOR Cipher";
+            basicInfo = new Dictionary<string, string>
+            {
+                { "Patches Count", $"{_pe.CryptoPatches.Count}" },
+                { "Target Executeable", $"{_pe.FilePath}" },
+                { "Client Internal Version", $"{_pe.ClientVersion}" },
+                { "Linker Version", $"MSVC-{_pe.MajorLinkerVersion}.0 (Microsoft Visual C++)" },
+                { "Inlined Functions Count", $"{_pe.CryptoPatches.Count(p => p.Inlined)}" },
+                { "Encryption Algorithm", cryptoType }
+            };
         }
 
         private void ViewOffsetsWindow_Load(object sender, EventArgs e)
@@ -32,16 +45,17 @@ namespace KO.TBLCryptoEditor.Views
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"<style>{GetStyleSheet()}\n</style>");
 
-            var patches = _pe.CryptoPatches;
-            int patCount = patches.Count;
-            AddLineWithTag(sb, "Patches Count", patCount);
-            AddLineWithTag(sb, "Target Executeable", _pe.FilePath);
-            AddLineWithTag(sb, "Client Internal Version", _pe.ClientVersion);
-            AddLineWithTag(sb, "Linker Version", $"MSVC-{_pe.MajorLinkerVersion}.0 (Microsoft Visual C++)");
-            AddLineWithTag(sb, "Inlined Functions Count", patches.Count(p => p.Inlined));
-
-            string encryptionDesc = patches.CryptoType == CryptoType.XOR ? "XOR Cipher" : "DES + XOR Cipher";
-            AddLineWithTag(sb, "Encryption Algorithm", encryptionDesc);
+            using (HtmlTable table = new HtmlTable(sb, "Executeable Basic Information"))
+            {
+                foreach (var item in basicInfo)
+                {
+                    using (HtmlTableRow row = new HtmlTableRow(sb))
+                    {
+                        row.AddCell($"<strong>{item.Key}</strong>");
+                        row.AddCell(item.Value);
+                    }
+                }
+            }
 
             AddSeparator(sb);
 
@@ -56,6 +70,8 @@ namespace KO.TBLCryptoEditor.Views
                     row.AddCell("Inlined Function?");
                 }
 
+                var patches = _pe.CryptoPatches;
+                int patCount = patches.Count;
                 for (int i = 0; i < patCount; i++)
                 {
                     using (HtmlTableRow row = new HtmlTableRow(sb))
@@ -105,7 +121,7 @@ namespace KO.TBLCryptoEditor.Views
 
         private void AddSeparator(StringBuilder sb)
         {
-            sb.AppendLine("<hr style=\"width:100%;text-align:left;margin-left:0\"><br>");
+            sb.AppendLine("<br><hr style=\"width:100%;text-align:left;margin-left:0\"><br>");
         }
 
         private void btnExit_Click(object sender, EventArgs e)
