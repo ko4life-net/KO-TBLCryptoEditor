@@ -22,7 +22,7 @@ namespace KO.TBLCryptoEditor.Utils
             set => SetId(value);
         }
 
-        public string @Class
+        public string Class
         { 
             get => _class;
             set => SetClass(value);
