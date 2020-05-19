@@ -77,11 +77,17 @@ namespace KO.TBLCryptoEditor.Views
                 int patCount = patches.Count;
                 for (int i = 0; i < patCount; i++)
                 {
-                    using (HtmlTableRow row = new HtmlTableRow(sb, false, (i + 1) % 2 != 0 ? "odd" : "even"))
-                    {
-                        CryptoPatch patch = patches[i];
-                        CryptoKey fk = patch.Keys.First();
+                    CryptoPatch patch = patches[i];
+                    CryptoKey fk = patch.Keys.First();
 
+                    string rowId = String.Empty;
+                    if (patch.Inlined)
+                        rowId = "inlined";
+                    else
+                        rowId = (i + 1) % 2 != 0 ? "odd" : "even";
+
+                    using (HtmlTableRow row = new HtmlTableRow(sb, false, rowId))
+                    {
                         row.AddCell((i+1).ToString());
 
                         string keys, fileOffsets, VAs;
@@ -191,6 +197,10 @@ table td, table th {
 
 table tbody #even {
 	background-color: #f2f2f2;
+}
+
+table tbody #inlined {
+	background-color: #ff5f5f;
 }
 
 table th {
