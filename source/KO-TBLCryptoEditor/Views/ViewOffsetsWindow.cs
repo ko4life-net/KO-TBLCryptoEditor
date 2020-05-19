@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -74,7 +77,7 @@ namespace KO.TBLCryptoEditor.Views
                 int patCount = patches.Count;
                 for (int i = 0; i < patCount; i++)
                 {
-                    using (HtmlTableRow row = new HtmlTableRow(sb))
+                    using (HtmlTableRow row = new HtmlTableRow(sb, false, (i + 1) % 2 != 0 ? "odd" : "even"))
                     {
                         CryptoPatch patch = patches[i];
                         CryptoKey fk = patch.Keys.First();
@@ -124,19 +127,46 @@ namespace KO.TBLCryptoEditor.Views
             sb.AppendLine("<br><hr style=\"width:100%;text-align:left;margin-left:0\"><br>");
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        private void btnCopyToClipboard_Click(object sender, EventArgs e)
         {
-            Close();
+            btnCopyClipboard.Text = "Copied!";
+            Task.Run(() =>
+            {
+                Thread.Sleep(700);
+                btnCopyClipboard.InvokeSafe(() => btnCopyClipboard.Text = "Copy to Clipboard");
+            });
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var item in basicInfo)
+                sb.AppendLine($"{item.Key}: {item.Value}");
+
+            sb.AppendLine();
+            var patches = _pe.CryptoPatches;
+            for (int i = 0; i < patches.Count; i++)
+            {
+                var patch = patches[i];
+                sb.AppendLine($"[{(i+1):D2}]: {patch}");
+            }
+
+            Clipboard.SetText(sb.ToString());
         }
 
         private void btnSaveToFile_Click(object sender, EventArgs e)
         {
-            // TODO(Gilad): Implement.
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "HTML |*.html";
+            sfd.Title = "Save as HTML format";
+            sfd.InitialDirectory = Path.GetDirectoryName(_pe.FilePath);
+            if (sfd.ShowDialog() != DialogResult.OK)
+                return;
+
+            File.WriteAllText(sfd.FileName, view.DocumentText);
         }
 
-        private void btnCopyToClipboard_Click(object sender, EventArgs e)
+        private void btnExit_Click(object sender, EventArgs e)
         {
-            // TODO(Gilad): Implement.
+            Close();
         }
 
         private string GetStyleSheet()
@@ -159,9 +189,9 @@ table td, table th {
   padding: 8px;
 }
 
-table tr:nth-child(even){background-color: #f2f2f2;}
-
-table tr:hover {background-color: #ddd;}
+table tbody #even {
+	background-color: #f2f2f2;
+}
 
 table th {
   padding-top: 12px;

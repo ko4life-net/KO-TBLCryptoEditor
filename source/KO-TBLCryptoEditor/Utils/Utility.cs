@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -10,6 +11,14 @@ namespace KO.TBLCryptoEditor.Utils
     public static class Utility
     {
         public static string TimeStamp => DateTime.Now.ToString("T");
+
+        public static void InvokeSafe(this ISynchronizeInvoke caller, Action method)
+        {
+            if (caller.InvokeRequired)
+                caller.Invoke(method, null);
+            else
+                method.Invoke();
+        }
 
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
