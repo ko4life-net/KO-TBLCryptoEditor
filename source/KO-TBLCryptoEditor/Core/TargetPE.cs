@@ -13,7 +13,7 @@ namespace KO.TBLCryptoEditor.Core
 {
     public partial class TargetPE
     {
-        private static readonly ILog Log = Logger.GetLogger();
+        private static readonly ILog Log = Logger.GetLogger(nameof(TargetPE));
 
         private byte[] _data;
 

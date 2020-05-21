@@ -10,12 +10,13 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using KO.TBLCryptoEditor.Controls;
 using KO.TBLCryptoEditor.Core;
 using KO.TBLCryptoEditor.Utils;
+using System.Runtime.CompilerServices;
 
 namespace KO.TBLCryptoEditor.Views
 {
     public partial class MainWindow : Form
     {
-        private static readonly ILog Log = Logger.GetLogger();
+        private static readonly ILog Log = Logger.GetLogger(nameof(MainWindow));
 
         private TargetPE _targetFile;
         private short[] _previousKeys;
