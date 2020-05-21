@@ -295,7 +295,7 @@
             this.MinimizeBox = false;
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "KnightOnline Table Encryption Editor";
+            this.Text = "Knight OnLine Table Encryption Editor";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

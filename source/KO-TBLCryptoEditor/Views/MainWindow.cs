@@ -27,7 +27,7 @@ namespace KO.TBLCryptoEditor.Views
             _targetFile = null;
             _previousKeys = null;
 
-            Text += $" v{Application.ProductVersion}";
+            Text += $" (ko4life.net - v{Application.ProductVersion})";
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
