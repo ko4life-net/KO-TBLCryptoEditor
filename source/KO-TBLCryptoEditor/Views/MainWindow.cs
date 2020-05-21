@@ -46,21 +46,21 @@ namespace KO.TBLCryptoEditor.Views
 
         private void EnableControls()
         {
-            btnGenerateKeys.Enabled = true;
+            btnRandomKeys.Enabled = true;
             btnUpdateClient.Enabled = true;
             cbxManualUpdate.Enabled = true;
-            btnViewOffsets.Enabled = true;
+            btnGeneralReport.Enabled = true;
             btnUpdateData.Enabled = true;
             //gbxOptions.Controls.Cast<Control>().ForEach(c => c.Enabled = true);
         }
 
         private void DisableControls()
         {
-            btnGenerateKeys.Enabled = false;
+            btnRandomKeys.Enabled = false;
             btnUpdateClient.Enabled = false;
-            btnViewOffsets.Enabled = false;
+            btnGeneralReport.Enabled = false;
             cbxManualUpdate.Enabled = false;
-            btnViewOffsets.Enabled = false;
+            btnGeneralReport.Enabled = false;
             btnUpdateData.Enabled = false;
             //gbxOptions.Controls.Cast<Control>().ForEach(c => c.Enabled = false);
         }
@@ -169,7 +169,7 @@ namespace KO.TBLCryptoEditor.Views
 
         private void btnViewOffsets_Click(object sender, EventArgs e)
         {
-            new ViewOffsetsWindow(_targetFile).ShowDialog(this);
+            new GeneralReportWindow(_targetFile).ShowDialog(this);
         }
 
         private void btnUpdateData_Click(object sender, EventArgs e)

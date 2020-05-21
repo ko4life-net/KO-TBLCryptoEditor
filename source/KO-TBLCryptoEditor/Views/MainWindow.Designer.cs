@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.btnGenerateKeys = new System.Windows.Forms.Button();
+            this.btnRandomKeys = new System.Windows.Forms.Button();
             this.btnUpdateClient = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -38,33 +38,33 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbxKey1 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
-            this.tbxKey2 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
-            this.tbxKey3 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
             this.cbxCreateBackup = new System.Windows.Forms.CheckBox();
             this.gbxOptions = new System.Windows.Forms.GroupBox();
             this.cbxSkipClientVersion = new System.Windows.Forms.CheckBox();
             this.cbxSkipKOValidation = new System.Windows.Forms.CheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnViewOffsets = new System.Windows.Forms.Button();
+            this.btnGeneralReport = new System.Windows.Forms.Button();
             this.btnUpdateData = new System.Windows.Forms.Button();
             this.panelDragArea = new System.Windows.Forms.Panel();
+            this.tbxKey1 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
+            this.tbxKey2 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
+            this.tbxKey3 = new KO.TBLCryptoEditor.Controls.CryptoKeyInput();
             this.statusStrip.SuspendLayout();
             this.gbxKeys.SuspendLayout();
             this.gbxOptions.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnGenerateKeys
+            // btnRandomKeys
             // 
-            this.btnGenerateKeys.Enabled = false;
-            this.btnGenerateKeys.Location = new System.Drawing.Point(241, 143);
-            this.btnGenerateKeys.Name = "btnGenerateKeys";
-            this.btnGenerateKeys.Size = new System.Drawing.Size(153, 32);
-            this.btnGenerateKeys.TabIndex = 0;
-            this.btnGenerateKeys.Text = "Generate New Random Keys";
-            this.toolTip.SetToolTip(this.btnGenerateKeys, "Randomly generate new keys.");
-            this.btnGenerateKeys.UseVisualStyleBackColor = true;
-            this.btnGenerateKeys.Click += new System.EventHandler(this.btnGenerateKeys_Click);
+            this.btnRandomKeys.Enabled = false;
+            this.btnRandomKeys.Location = new System.Drawing.Point(241, 143);
+            this.btnRandomKeys.Name = "btnRandomKeys";
+            this.btnRandomKeys.Size = new System.Drawing.Size(153, 32);
+            this.btnRandomKeys.TabIndex = 0;
+            this.btnRandomKeys.Text = "Randomize Keys";
+            this.toolTip.SetToolTip(this.btnRandomKeys, "Randomize your current keys to something else.");
+            this.btnRandomKeys.UseVisualStyleBackColor = true;
+            this.btnRandomKeys.Click += new System.EventHandler(this.btnGenerateKeys_Click);
             // 
             // btnUpdateClient
             // 
@@ -75,7 +75,7 @@
             this.btnUpdateClient.Size = new System.Drawing.Size(153, 32);
             this.btnUpdateClient.TabIndex = 2;
             this.btnUpdateClient.Text = "Update Client Encryption";
-            this.toolTip.SetToolTip(this.btnUpdateClient, "New keys will be applied inside the executable.");
+            this.toolTip.SetToolTip(this.btnUpdateClient, "Apply/patch the new keys into your target executable.");
             this.btnUpdateClient.UseVisualStyleBackColor = true;
             this.btnUpdateClient.Click += new System.EventHandler(this.btnPatchClient_Click);
             // 
@@ -153,6 +153,98 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Key1:";
             // 
+            // cbxCreateBackup
+            // 
+            this.cbxCreateBackup.AutoSize = true;
+            this.cbxCreateBackup.Checked = true;
+            this.cbxCreateBackup.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxCreateBackup.Location = new System.Drawing.Point(6, 24);
+            this.cbxCreateBackup.Name = "cbxCreateBackup";
+            this.cbxCreateBackup.Size = new System.Drawing.Size(97, 17);
+            this.cbxCreateBackup.TabIndex = 0;
+            this.cbxCreateBackup.Text = "Create Backup";
+            this.toolTip.SetToolTip(this.cbxCreateBackup, "Creates a backup before any modifications will be applied.");
+            this.cbxCreateBackup.UseVisualStyleBackColor = true;
+            // 
+            // gbxOptions
+            // 
+            this.gbxOptions.Controls.Add(this.cbxSkipClientVersion);
+            this.gbxOptions.Controls.Add(this.cbxSkipKOValidation);
+            this.gbxOptions.Controls.Add(this.cbxCreateBackup);
+            this.gbxOptions.Location = new System.Drawing.Point(403, 6);
+            this.gbxOptions.Name = "gbxOptions";
+            this.gbxOptions.Size = new System.Drawing.Size(152, 128);
+            this.gbxOptions.TabIndex = 5;
+            this.gbxOptions.TabStop = false;
+            this.gbxOptions.Text = "Options";
+            // 
+            // cbxSkipClientVersion
+            // 
+            this.cbxSkipClientVersion.AutoSize = true;
+            this.cbxSkipClientVersion.Location = new System.Drawing.Point(6, 71);
+            this.cbxSkipClientVersion.Name = "cbxSkipClientVersion";
+            this.cbxSkipClientVersion.Size = new System.Drawing.Size(114, 17);
+            this.cbxSkipClientVersion.TabIndex = 2;
+            this.cbxSkipClientVersion.Text = "Skip Client Version";
+            this.toolTip.SetToolTip(this.cbxSkipClientVersion, "Check this to prevent the parser from trying to retrieve the internal client vers" +
+        "ion. Only use if it failed loading the target exe.");
+            this.cbxSkipClientVersion.UseVisualStyleBackColor = true;
+            // 
+            // cbxSkipKOValidation
+            // 
+            this.cbxSkipKOValidation.AutoSize = true;
+            this.cbxSkipKOValidation.Location = new System.Drawing.Point(6, 47);
+            this.cbxSkipKOValidation.Name = "cbxSkipKOValidation";
+            this.cbxSkipKOValidation.Size = new System.Drawing.Size(114, 17);
+            this.cbxSkipKOValidation.TabIndex = 1;
+            this.cbxSkipKOValidation.Text = "Skip KO Validation";
+            this.toolTip.SetToolTip(this.cbxSkipKOValidation, "Check this to prevent the parser from trying to retrieve the internal window name" +
+        " \"Knight OnLine Client\". Only use if it failed loading the target exe.");
+            this.cbxSkipKOValidation.UseVisualStyleBackColor = true;
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 10000;
+            this.toolTip.InitialDelay = 500;
+            this.toolTip.ReshowDelay = 100;
+            // 
+            // btnGeneralReport
+            // 
+            this.btnGeneralReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGeneralReport.Enabled = false;
+            this.btnGeneralReport.Location = new System.Drawing.Point(241, 181);
+            this.btnGeneralReport.Name = "btnGeneralReport";
+            this.btnGeneralReport.Size = new System.Drawing.Size(153, 32);
+            this.btnGeneralReport.TabIndex = 1;
+            this.btnGeneralReport.Text = "Show General Report";
+            this.toolTip.SetToolTip(this.btnGeneralReport, "View general information and all keys that were found from the target executable." +
+        "");
+            this.btnGeneralReport.UseVisualStyleBackColor = true;
+            this.btnGeneralReport.Click += new System.EventHandler(this.btnViewOffsets_Click);
+            // 
+            // btnUpdateData
+            // 
+            this.btnUpdateData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateData.Enabled = false;
+            this.btnUpdateData.Location = new System.Drawing.Point(402, 143);
+            this.btnUpdateData.Name = "btnUpdateData";
+            this.btnUpdateData.Size = new System.Drawing.Size(153, 32);
+            this.btnUpdateData.TabIndex = 3;
+            this.btnUpdateData.Text = "Update Data Encryption";
+            this.toolTip.SetToolTip(this.btnUpdateData, "Batch update your current TBLs to match with your executable new encryption.");
+            this.btnUpdateData.UseVisualStyleBackColor = true;
+            this.btnUpdateData.Click += new System.EventHandler(this.btnUpdateData_Click);
+            // 
+            // panelDragArea
+            // 
+            this.panelDragArea.AllowDrop = true;
+            this.panelDragArea.BackgroundImage = global::KO.TBLCryptoEditor.Properties.Resources.ko4life;
+            this.panelDragArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelDragArea.Location = new System.Drawing.Point(9, 12);
+            this.panelDragArea.Name = "panelDragArea";
+            this.panelDragArea.Size = new System.Drawing.Size(226, 201);
+            this.panelDragArea.TabIndex = 5;
+            // 
             // tbxKey1
             // 
             this.tbxKey1.BackColor = System.Drawing.SystemColors.Control;
@@ -183,90 +275,6 @@
             this.tbxKey3.TabIndex = 2;
             this.tbxKey3.Text = "0xFFFF";
             // 
-            // cbxCreateBackup
-            // 
-            this.cbxCreateBackup.AutoSize = true;
-            this.cbxCreateBackup.Checked = true;
-            this.cbxCreateBackup.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxCreateBackup.Location = new System.Drawing.Point(6, 19);
-            this.cbxCreateBackup.Name = "cbxCreateBackup";
-            this.cbxCreateBackup.Size = new System.Drawing.Size(97, 17);
-            this.cbxCreateBackup.TabIndex = 0;
-            this.cbxCreateBackup.Text = "Create Backup";
-            this.toolTip.SetToolTip(this.cbxCreateBackup, "Creates a backup before any modifications will be applied.");
-            this.cbxCreateBackup.UseVisualStyleBackColor = true;
-            // 
-            // gbxOptions
-            // 
-            this.gbxOptions.Controls.Add(this.cbxSkipClientVersion);
-            this.gbxOptions.Controls.Add(this.cbxSkipKOValidation);
-            this.gbxOptions.Controls.Add(this.cbxCreateBackup);
-            this.gbxOptions.Location = new System.Drawing.Point(403, 6);
-            this.gbxOptions.Name = "gbxOptions";
-            this.gbxOptions.Size = new System.Drawing.Size(152, 128);
-            this.gbxOptions.TabIndex = 5;
-            this.gbxOptions.TabStop = false;
-            this.gbxOptions.Text = "Options";
-            // 
-            // cbxSkipClientVersion
-            // 
-            this.cbxSkipClientVersion.AutoSize = true;
-            this.cbxSkipClientVersion.Location = new System.Drawing.Point(6, 66);
-            this.cbxSkipClientVersion.Name = "cbxSkipClientVersion";
-            this.cbxSkipClientVersion.Size = new System.Drawing.Size(114, 17);
-            this.cbxSkipClientVersion.TabIndex = 2;
-            this.cbxSkipClientVersion.Text = "Skip Client Version";
-            this.toolTip.SetToolTip(this.cbxSkipClientVersion, "Prevent from the parser to try and retrieve the internal KO client version.");
-            this.cbxSkipClientVersion.UseVisualStyleBackColor = true;
-            // 
-            // cbxSkipKOValidation
-            // 
-            this.cbxSkipKOValidation.AutoSize = true;
-            this.cbxSkipKOValidation.Location = new System.Drawing.Point(6, 42);
-            this.cbxSkipKOValidation.Name = "cbxSkipKOValidation";
-            this.cbxSkipKOValidation.Size = new System.Drawing.Size(114, 17);
-            this.cbxSkipKOValidation.TabIndex = 1;
-            this.cbxSkipKOValidation.Text = "Skip KO Validation";
-            this.toolTip.SetToolTip(this.cbxSkipKOValidation, "Prevent from the parser to validate if \"Knight Online Client\" string exists.");
-            this.cbxSkipKOValidation.UseVisualStyleBackColor = true;
-            // 
-            // btnViewOffsets
-            // 
-            this.btnViewOffsets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewOffsets.Enabled = false;
-            this.btnViewOffsets.Location = new System.Drawing.Point(241, 181);
-            this.btnViewOffsets.Name = "btnViewOffsets";
-            this.btnViewOffsets.Size = new System.Drawing.Size(153, 32);
-            this.btnViewOffsets.TabIndex = 1;
-            this.btnViewOffsets.Text = "View Found Offsets";
-            this.toolTip.SetToolTip(this.btnViewOffsets, "View all keys that were found on the target executable and additional informatio" +
-        "n on the target exe.");
-            this.btnViewOffsets.UseVisualStyleBackColor = true;
-            this.btnViewOffsets.Click += new System.EventHandler(this.btnViewOffsets_Click);
-            // 
-            // btnUpdateData
-            // 
-            this.btnUpdateData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateData.Enabled = false;
-            this.btnUpdateData.Location = new System.Drawing.Point(402, 143);
-            this.btnUpdateData.Name = "btnUpdateData";
-            this.btnUpdateData.Size = new System.Drawing.Size(153, 32);
-            this.btnUpdateData.TabIndex = 3;
-            this.btnUpdateData.Text = "Update Data Encryption";
-            this.toolTip.SetToolTip(this.btnUpdateData, "Batch update for all current client TBLs to match with the new client encryption");
-            this.btnUpdateData.UseVisualStyleBackColor = true;
-            this.btnUpdateData.Click += new System.EventHandler(this.btnUpdateData_Click);
-            // 
-            // panelDragArea
-            // 
-            this.panelDragArea.AllowDrop = true;
-            this.panelDragArea.BackgroundImage = global::KO.TBLCryptoEditor.Properties.Resources.ko4life;
-            this.panelDragArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panelDragArea.Location = new System.Drawing.Point(9, 12);
-            this.panelDragArea.Name = "panelDragArea";
-            this.panelDragArea.Size = new System.Drawing.Size(226, 201);
-            this.panelDragArea.TabIndex = 5;
-            // 
             // MainWindow
             // 
             this.AllowDrop = true;
@@ -277,10 +285,10 @@
             this.Controls.Add(this.gbxKeys);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.panelDragArea);
-            this.Controls.Add(this.btnViewOffsets);
+            this.Controls.Add(this.btnGeneralReport);
             this.Controls.Add(this.btnUpdateData);
             this.Controls.Add(this.btnUpdateClient);
-            this.Controls.Add(this.btnGenerateKeys);
+            this.Controls.Add(this.btnRandomKeys);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = global::KO.TBLCryptoEditor.Properties.Resources.app;
             this.MaximizeBox = false;
@@ -301,7 +309,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnGenerateKeys;
+        private System.Windows.Forms.Button btnRandomKeys;
         private System.Windows.Forms.Button btnUpdateClient;
         private Controls.CryptoKeyInput tbxKey1;
         private Controls.CryptoKeyInput tbxKey2;
@@ -317,7 +325,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.Button btnViewOffsets;
+        private System.Windows.Forms.Button btnGeneralReport;
         private System.Windows.Forms.CheckBox cbxSkipKOValidation;
         private System.Windows.Forms.CheckBox cbxSkipClientVersion;
         private System.Windows.Forms.Button btnUpdateData;
