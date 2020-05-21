@@ -53,7 +53,7 @@ namespace KO.TBLCryptoEditor.Utils
                              "%newline";
 
             if (String.IsNullOrEmpty(configuration.LogPatternLayout))
-                pattern.ConversionPattern = "%date %-5level [%logger::%M]: %message%newline";
+                pattern.ConversionPattern = "%date %-5level %-4line[%logger::%M]: %message%newline";
                 //patternLayout.ConversionPattern = "[%level] [%M] [%class]%newline[%date]: %message%newline%exception";
                 //patternLayout.ConversionPattern = "%newline[%level] [%M] [%class]%newline[%date]: %message%newline%exception";
             else
