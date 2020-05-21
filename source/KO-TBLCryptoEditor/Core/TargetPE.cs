@@ -408,12 +408,12 @@ namespace KO.TBLCryptoEditor.Core
             {
                 foreach (var patch in CryptoPatches)
                 {
+                    Log.Info($"Before patched: {patch}");
                     for (int i = CryptoPatch.KEYS_COUNT - 1; i >= 0; i--)
                     {
                         if (i == 1 && !CanUpdateKey2)
                             continue;
 
-                        Log.Info($"Before patched: {patch}");
                         ms.Position = patch.Keys[i].Offset;
                         DWORD dword = (DWORD)newKeys[i];
                         ms.WriteByte(dword.byValue1);
