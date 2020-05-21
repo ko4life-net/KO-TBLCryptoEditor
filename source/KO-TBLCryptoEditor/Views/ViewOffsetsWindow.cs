@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace KO.TBLCryptoEditor.Views
 {
     public partial class ViewOffsetsWindow : Form
     {
-        Dictionary<string, string> basicInfo;
+        Dictionary<string, string> generalInfo;
         private TargetPE _pe;
 
         public ViewOffsetsWindow(TargetPE pe)
@@ -27,7 +28,7 @@ namespace KO.TBLCryptoEditor.Views
             InitializeComponent();
 
             string cryptoType = _pe.CryptoPatches.CryptoType == CryptoType.XOR ? "XOR Cipher" : "DES + XOR Cipher";
-            basicInfo = new Dictionary<string, string>
+            generalInfo = new Dictionary<string, string>
             {
                 { "Patches Count", $"{_pe.CryptoPatches.Count}" },
                 { "Target Executable", $"{_pe.FilePath}" },
@@ -40,6 +41,9 @@ namespace KO.TBLCryptoEditor.Views
 
         private void ViewOffsetsWindow_Load(object sender, EventArgs e)
         {
+            Size = new Size(1100, 800);
+            CenterToScreen();
+
             SerializePatches();
         }
 
@@ -48,9 +52,9 @@ namespace KO.TBLCryptoEditor.Views
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"<style>{GetStyleSheet()}\n</style>");
 
-            using (HtmlTable table = new HtmlTable(sb, "Executable Basic Information"))
+            using (HtmlTable table = new HtmlTable(sb, "General Information"))
             {
-                foreach (var item in basicInfo)
+                foreach (var item in generalInfo)
                 {
                     using (HtmlTableRow row = new HtmlTableRow(sb))
                     {
@@ -144,7 +148,7 @@ namespace KO.TBLCryptoEditor.Views
 
             StringBuilder sb = new StringBuilder();
 
-            foreach (var item in basicInfo)
+            foreach (var item in generalInfo)
                 sb.AppendLine($"{item.Key}: {item.Value}");
 
             sb.AppendLine();
@@ -178,16 +182,24 @@ namespace KO.TBLCryptoEditor.Views
         private string GetStyleSheet()
         {
             return @"
-caption {
+table {
+  font-family: ""Trebuchet MS"", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table caption {
   font-size: 25px;
   font-weight: bold;
   padding: 5px;
 }
 
-table {
-  font-family: ""Trebuchet MS"", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #25D366;
+  color: white;
 }
 
 table td, table th {
@@ -195,20 +207,12 @@ table td, table th {
   padding: 8px;
 }
 
-table tbody #even {
+table #even {
 	background-color: #f2f2f2;
 }
 
-table tbody #inlined {
+table #inlined {
 	background-color: #ff5f5f;
-}
-
-table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
 }
                 ";
         }
