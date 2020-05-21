@@ -13,12 +13,12 @@ using KO.TBLCryptoEditor.Utils;
 
 namespace KO.TBLCryptoEditor.Views
 {
-    public partial class ViewOffsetsWindow : Form
+    public partial class GeneralReportWindow : Form
     {
         Dictionary<string, string> generalInfo;
         private TargetPE _pe;
 
-        public ViewOffsetsWindow(TargetPE pe)
+        public GeneralReportWindow(TargetPE pe)
         {
             if (pe == null)
                 throw new ArgumentNullException();

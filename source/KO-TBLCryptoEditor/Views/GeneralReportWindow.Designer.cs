@@ -1,6 +1,6 @@
 ﻿namespace KO.TBLCryptoEditor.Views
 {
-    partial class ViewOffsetsWindow
+    partial class GeneralReportWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -142,7 +142,7 @@
             this.statusBar.TabIndex = 2;
             this.statusBar.Text = "statusStrip1";
             // 
-            // ViewOffsetsWindow
+            // GeneralReportWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -151,9 +151,9 @@
             this.Controls.Add(this.statusBar);
             this.Icon = global::KO.TBLCryptoEditor.Properties.Resources.app;
             this.MinimumSize = new System.Drawing.Size(787, 447);
-            this.Name = "ViewOffsetsWindow";
+            this.Name = "GeneralReportWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View Found Offsets";
+            this.Text = "General Report";
             this.Load += new System.EventHandler(this.ViewOffsetsWindow_Load);
             this.LayoutMain.ResumeLayout(false);
             this.layoutButtons.ResumeLayout(false);
