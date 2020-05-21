@@ -37,6 +37,8 @@ namespace KO.TBLCryptoEditor.Views
                 { "Inlined Functions Count", $"{_pe.CryptoPatches.Count(p => p.Inlined)}" },
                 { "Encryption Algorithm", cryptoType }
             };
+
+            Text = $" v{_pe.ClientVersion} Client {Text} (ko4life.net - v{Application.ProductVersion})";
         }
 
         private void ViewOffsetsWindow_Load(object sender, EventArgs e)
