@@ -61,6 +61,7 @@
             this.btnRandomKeys.Name = "btnRandomKeys";
             this.btnRandomKeys.Size = new System.Drawing.Size(153, 32);
             this.btnRandomKeys.TabIndex = 0;
+            this.btnRandomKeys.TabStop = false;
             this.btnRandomKeys.Text = "Randomize Keys";
             this.toolTip.SetToolTip(this.btnRandomKeys, "Randomize your current keys to something else.");
             this.btnRandomKeys.UseVisualStyleBackColor = true;
@@ -74,6 +75,7 @@
             this.btnUpdateClient.Name = "btnUpdateClient";
             this.btnUpdateClient.Size = new System.Drawing.Size(153, 32);
             this.btnUpdateClient.TabIndex = 2;
+            this.btnUpdateClient.TabStop = false;
             this.btnUpdateClient.Text = "Update Client Encryption";
             this.toolTip.SetToolTip(this.btnUpdateClient, "Apply/patch the new keys into your target executable.");
             this.btnUpdateClient.UseVisualStyleBackColor = true;
@@ -104,6 +106,7 @@
             this.cbxManualUpdate.Name = "cbxManualUpdate";
             this.cbxManualUpdate.Size = new System.Drawing.Size(101, 17);
             this.cbxManualUpdate.TabIndex = 3;
+            this.cbxManualUpdate.TabStop = false;
             this.cbxManualUpdate.Text = "Manual Change";
             this.toolTip.SetToolTip(this.cbxManualUpdate, "Manually update the tbl keys. If you can\'t update Key2, this is because there wer" +
         "e inlined functions in that exe.");
@@ -162,6 +165,7 @@
             this.cbxCreateBackup.Name = "cbxCreateBackup";
             this.cbxCreateBackup.Size = new System.Drawing.Size(97, 17);
             this.cbxCreateBackup.TabIndex = 0;
+            this.cbxCreateBackup.TabStop = false;
             this.cbxCreateBackup.Text = "Create Backup";
             this.toolTip.SetToolTip(this.cbxCreateBackup, "Creates a backup before any modifications will be applied.");
             this.cbxCreateBackup.UseVisualStyleBackColor = true;
@@ -185,6 +189,7 @@
             this.cbxSkipClientVersion.Name = "cbxSkipClientVersion";
             this.cbxSkipClientVersion.Size = new System.Drawing.Size(114, 17);
             this.cbxSkipClientVersion.TabIndex = 2;
+            this.cbxSkipClientVersion.TabStop = false;
             this.cbxSkipClientVersion.Text = "Skip Client Version";
             this.toolTip.SetToolTip(this.cbxSkipClientVersion, "Check this to prevent the parser from trying to retrieve the internal client vers" +
         "ion. Only use if it failed loading the target exe.");
@@ -197,6 +202,7 @@
             this.cbxSkipKOValidation.Name = "cbxSkipKOValidation";
             this.cbxSkipKOValidation.Size = new System.Drawing.Size(114, 17);
             this.cbxSkipKOValidation.TabIndex = 1;
+            this.cbxSkipKOValidation.TabStop = false;
             this.cbxSkipKOValidation.Text = "Skip KO Validation";
             this.toolTip.SetToolTip(this.cbxSkipKOValidation, "Check this to prevent the parser from trying to retrieve the internal window name" +
         " \"Knight OnLine Client\". Only use if it failed loading the target exe.");
@@ -216,6 +222,7 @@
             this.btnGeneralReport.Name = "btnGeneralReport";
             this.btnGeneralReport.Size = new System.Drawing.Size(153, 32);
             this.btnGeneralReport.TabIndex = 1;
+            this.btnGeneralReport.TabStop = false;
             this.btnGeneralReport.Text = "Show General Report";
             this.toolTip.SetToolTip(this.btnGeneralReport, "View general information and all keys that were found from the target executable." +
         "");
@@ -230,6 +237,7 @@
             this.btnUpdateData.Name = "btnUpdateData";
             this.btnUpdateData.Size = new System.Drawing.Size(153, 32);
             this.btnUpdateData.TabIndex = 3;
+            this.btnUpdateData.TabStop = false;
             this.btnUpdateData.Text = "Update Data Encryption";
             this.toolTip.SetToolTip(this.btnUpdateData, "Batch update your current TBLs to match with your executable new encryption.");
             this.btnUpdateData.UseVisualStyleBackColor = true;
@@ -253,6 +261,7 @@
             this.tbxKey1.ReadOnly = true;
             this.tbxKey1.Size = new System.Drawing.Size(48, 20);
             this.tbxKey1.TabIndex = 0;
+            this.tbxKey1.TabStop = false;
             this.tbxKey1.Text = "0xFFFF";
             // 
             // tbxKey2
@@ -263,6 +272,7 @@
             this.tbxKey2.ReadOnly = true;
             this.tbxKey2.Size = new System.Drawing.Size(48, 20);
             this.tbxKey2.TabIndex = 1;
+            this.tbxKey2.TabStop = false;
             this.tbxKey2.Text = "0xFFFF";
             // 
             // tbxKey3
@@ -273,6 +283,7 @@
             this.tbxKey3.ReadOnly = true;
             this.tbxKey3.Size = new System.Drawing.Size(48, 20);
             this.tbxKey3.TabIndex = 2;
+            this.tbxKey3.TabStop = false;
             this.tbxKey3.Text = "0xFFFF";
             // 
             // MainWindow
