@@ -10,7 +10,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using KO.TBLCryptoEditor.Controls;
 using KO.TBLCryptoEditor.Core;
 using KO.TBLCryptoEditor.Utils;
-using System.Runtime.CompilerServices;
 
 namespace KO.TBLCryptoEditor.Views
 {
@@ -42,6 +41,11 @@ namespace KO.TBLCryptoEditor.Views
                     ee.Effect = DragDropEffects.Copy;
                 }
             };
+
+            var disableFocus = new EventHandler(delegate { ActiveControl = null; });
+            foreach (var control in Controls)
+                if (control is Button button)
+                    button.GotFocus += disableFocus;
         }
 
         private void EnableControls()
@@ -115,8 +119,6 @@ namespace KO.TBLCryptoEditor.Views
 
         private void btnGenerateKeys_Click(object sender, EventArgs e)
         {
-            ActiveControl = null;
-
             Random rnd = new Random(Seed: (int)DateTime.Now.Ticks);
             tbxKey1.Text = $"0x{rnd.Next(200, 35000):X4}";
             if (tbxKey2.Enabled)
@@ -126,8 +128,6 @@ namespace KO.TBLCryptoEditor.Views
 
         private void btnPatchClient_Click(object sender, EventArgs e)
         {
-            ActiveControl = null;
-
             if (cbxCreateBackup.Checked && !_targetFile.CreateBackup())
             {
                 var answer = MessageBox.Show("Failed to create backup.\n" +
@@ -173,15 +173,11 @@ namespace KO.TBLCryptoEditor.Views
 
         private void btnViewOffsets_Click(object sender, EventArgs e)
         {
-            ActiveControl = null;
-
             new GeneralReportWindow(_targetFile).ShowDialog(this);
         }
 
         private void btnUpdateData_Click(object sender, EventArgs e)
         {
-            ActiveControl = null;
-
             string targetRootDir = _targetFile.FileInfo.DirectoryName;
             string targetDataDir = Path.Combine(targetRootDir, "Data");
             string dirPath = String.Empty;
