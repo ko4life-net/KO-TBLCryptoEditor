@@ -31,6 +31,11 @@ namespace KO.TBLCryptoEditor.Views
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            RegisterEvents();
+        }
+
+        private void RegisterEvents()
+        {
             panelDragArea.DragLeave += (ss, ee) => panelDragArea.BackColor = SystemColors.Control;
             panelDragArea.DragEnter += (ss, ee) => panelDragArea.BackColor = SystemColors.ActiveCaption;
             panelDragArea.DragDrop += (ss, ee) => LoadPE(((string[])ee.Data.GetData(DataFormats.FileDrop))[0]);
@@ -46,6 +51,8 @@ namespace KO.TBLCryptoEditor.Views
             foreach (var control in Controls)
                 if (control is Button button)
                     button.GotFocus += disableFocus;
+
+            btnGeneralReport.Click += (ss, ee) => new GeneralReportWindow(_targetFile).ShowDialog(this);
         }
 
         private void EnableControls()
@@ -169,11 +176,6 @@ namespace KO.TBLCryptoEditor.Views
             tbxKey1.ReadOnly = !cbxManualUpdate.Checked;
             tbxKey2.ReadOnly = !cbxManualUpdate.Checked && _targetFile.CanUpdateKey2;
             tbxKey3.ReadOnly = !cbxManualUpdate.Checked;
-        }
-
-        private void btnViewOffsets_Click(object sender, EventArgs e)
-        {
-            new GeneralReportWindow(_targetFile).ShowDialog(this);
         }
 
         private void btnUpdateData_Click(object sender, EventArgs e)

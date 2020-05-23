@@ -227,7 +227,6 @@
             this.toolTip.SetToolTip(this.btnGeneralReport, "View general information and all keys that were found from the target executable." +
         "");
             this.btnGeneralReport.UseVisualStyleBackColor = true;
-            this.btnGeneralReport.Click += new System.EventHandler(this.btnViewOffsets_Click);
             // 
             // btnUpdateData
             // 
