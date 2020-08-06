@@ -47,10 +47,17 @@ namespace KO.TBLCryptoEditor.Views
                 }
             };
 
-            var disableFocus = new EventHandler(delegate { ActiveControl = null; });
-            foreach (var control in Controls)
-                if (control is Button button)
-                    button.GotFocus += disableFocus;
+            var handler = new EventHandler(delegate { ActiveControl = null; });
+            Action<Control> disableFocus = null;
+            disableFocus = (control) =>
+            {
+                foreach (Control c in control.Controls)
+                    if (c is Panel)
+                        disableFocus(c);
+                    else if (c is Button b)
+                        b.GotFocus += handler;
+            };
+            disableFocus(this);
 
             btnGeneralReport.Click += (ss, ee) => new GeneralReportWindow(_targetFile).ShowDialog(this);
         }
@@ -147,7 +154,7 @@ namespace KO.TBLCryptoEditor.Views
             if (Utility.IsFileLocked(_targetFile.FilePath))
             {
                 MessageBox.Show("Target file seem to be locked by other processes.\n" +
-                                "Make sure to close the following apps and try again:\n" + 
+                                "Make sure to close the following apps and try again:\n" +
                                 Utility.WhoIsFileLocking(_targetFile.FilePath),
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -214,7 +221,7 @@ namespace KO.TBLCryptoEditor.Views
 
                 dirPath = dialog.FileName;
             }
- 
+
             if (UpdateTablesEncryption(dirPath))
                 MessageBox.Show("Successfully update tables to new encryption.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
