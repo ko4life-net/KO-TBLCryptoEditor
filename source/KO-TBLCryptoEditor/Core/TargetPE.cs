@@ -103,7 +103,7 @@ namespace KO.TBLCryptoEditor.Core
 
         private bool InitClientVersion()
         {
-            const int MAX_STEPS_FORWARD = 4;
+            const int MAX_STEPS_FORWARD = 10;
             const int MIN_CLIENT_VERSION = 1000;
             const int MAX_CLIENT_VERSION = 5000;
 
